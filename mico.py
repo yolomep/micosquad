@@ -12,7 +12,7 @@ mico_image = "Mythic_Mico.png"
 mico_db = mysql.connector.connect(
   host=os.getenv("HOST"),
   user=os.getenv("USER"),
-  password="",
+  password=os.getenv("PASSWORD"),
   database=os.getenv("DATABASE"),
   port=os.getenv("PORT")
 )
@@ -58,6 +58,10 @@ def main_view():
     choices.extend(mico_procedures.keys())
     choices.extend(mico_views)
     choice = easygui.buttonbox("Choose a thing", image=mico_image, choices=choices)
+    # choice = easygui.choicebox("Choose a thing", choices=choices)
+    if choice == None:
+        return
+    
     if choice in mico_views:
         # display view
         view_text = "Couldn't get this view"
