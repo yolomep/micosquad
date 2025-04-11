@@ -1,0 +1,3 @@
+easygui
+python-dotenv
+mysql-connector-python
