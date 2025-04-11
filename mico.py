@@ -12,7 +12,9 @@ mico_image = "Mythic_Mico.png"
 mico_db = mysql.connector.connect(
   host=os.getenv("HOST"),
   user=os.getenv("USER"),
-  password=os.getenv("PASSWORD")
+  password="",
+  database=os.getenv("DATABASE"),
+  port=os.getenv("PORT")
 )
 
 mico_cursor = mico_db.cursor()
