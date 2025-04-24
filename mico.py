@@ -10,7 +10,7 @@ load_dotenv()
 mico_image = "Mythic_Mico.png"
 
 mico_db = mysql.connector.connect(
-  host=os.getenv("HOST"),
+  host=os.getenv("LOCALHOST"),
   user=os.getenv("USER"),
   password=os.getenv("PASSWORD"),
   database=os.getenv("DATABASE"),
