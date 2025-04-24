@@ -19,6 +19,7 @@ EasyGUI – used for graphical interface for user to interact with
 tkinter – Used by easygui for GUI rendering.
 
 ## work distributed for the group:
+Yuang: used Tabulate library to display views with better looking table
 
 Ang - Frontend
 Tong - Backend
