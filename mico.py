@@ -2,7 +2,7 @@ import mysql.connector
 from dotenv import load_dotenv
 import os
 import easygui
-
+from tabulate import tabulate
 from customui import mico_multenterbox
 
 load_dotenv()
@@ -10,7 +10,7 @@ load_dotenv()
 mico_image = "Mythic_Mico.png"
 
 mico_db = mysql.connector.connect(
-  host=os.getenv("LOCALHOST"),
+  host=os.getenv("HOST"),
   user=os.getenv("USER"),
   password=os.getenv("PASSWORD"),
   database=os.getenv("DATABASE"),
@@ -57,8 +57,8 @@ def main_view():
     choices = []
     choices.extend(mico_procedures.keys())
     choices.extend(mico_views)
-    choice = easygui.buttonbox("Choose a thing", image=mico_image, choices=choices)
-    # choice = easygui.choicebox("Choose a thing", choices=choices)
+    # choice = easygui.buttonbox("Choose a thing", image=mico_image, choices=choices)
+    choice = easygui.choicebox("Choose a thing", choices=choices)
     if choice == None:
         return
     
@@ -67,7 +67,8 @@ def main_view():
         view_text = "Couldn't get this view"
         try:
             mico_cursor.execute(f"SELECT * FROM {choice[:-2]}")
-            view_text = str(mico_cursor.fetchall())
+            column_names = [i[0] for i in mico_cursor.description]
+            view_text = tabulate(mico_cursor.fetchall(), headers=column_names, tablefmt="grid")
         except Exception:
             pass
         easygui.codebox(choice, "View", view_text)
@@ -75,8 +76,8 @@ def main_view():
         # display procedure
         procedure = mico_procedures[choice]
         values = []
-        values = mico_multenterbox(choice, "Procedure", procedure["choices"], values, procedure["button"])
         try:
+            values = mico_multenterbox(choice, "Procedure", procedure["choices"], values, procedure["button"])
             mico_cursor.callproc(choice[:-2], values)
         except Exception:
             pass

@@ -1,3 +1,4 @@
 easygui
 python-dotenv
 mysql-connector-python
+tabulate
