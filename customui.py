@@ -2,7 +2,7 @@ import easygui
 import tkinter as tk
 
 
-window_position = "+300+200"
+window_position = "+400+200"
 
 PROPORTIONAL_FONT_FAMILY = ("MS", "Sans", "Serif")
 MONOSPACE_FONT_FAMILY = "Courier"
@@ -19,6 +19,16 @@ prop_font_line_length = 62
 fixw_font_line_length = 80
 num_lines_displayed = 50
 default_hpad_in_chars = 2
+
+import tkinter as tk
+from tkinter import ttk
+
+# Example style values – ensure these exist in your global scope
+PROPORTIONAL_FONT_FAMILY = "Segoe UI"
+PROPORTIONAL_FONT_SIZE = 12
+TEXT_ENTRY_FONT_SIZE = 11
+STANDARD_SELECTION_EVENTS = ["Return", "space"]
+window_position = "+300+200"  # fallback/default
 
 class GUItk(object):
 
@@ -201,7 +211,6 @@ class GUItk(object):
         self.boxRoot.event_generate("<Shift-Tab>")
 
 
-
 class MultiBox(object):
 
     """ Show multiple data entry fields
@@ -314,25 +323,52 @@ class MultiBox(object):
 
 
 
-class Mico_GUItk(GUItk):
-    def __init__(self, msg, title, fields, values, ok_button, mask_last, callback):
-        self.ok_button = ok_button
-        super().__init__(msg, title, fields, values, mask_last, callback)
-    
-    
-    def create_ok_button(self):
+class Mico_GUItk:
+    def __init__(self, msg, title, fields, values, ok_button, mask_last, callback_ui):
+        self.root = tk.Tk()
+        self.root.title(title)
 
-        okButton = tk.Button(self.buttonsFrame, takefocus=1, text=self.ok_button)
-        self.bindArrows(okButton)
-        okButton.pack(expand=1, side=tk.LEFT, padx='3m', pady='3m',
-                      ipadx='2m', ipady='1m')
+        # Styling
+        default_font = ("Segoe UI", 10)
+        entry_width = 30
+        padding = {"padx": 10, "pady": 5}
 
-        # for the commandButton, bind activation events to the activation event
-        # handler
-        commandButton = okButton
-        handler = self.ok_pressed
-        for selectionEvent in ["Return", "Button-1", "space"]:
-            commandButton.bind("<%s>" % selectionEvent, handler)
+        # Message label
+        tk.Label(self.root, text=msg, font=("Segoe UI", 11, "bold"), wraplength=400, justify="left").grid(row=0, column=0, columnspan=2, **padding)
+
+        self.entries = []
+
+        for i, field in enumerate(fields):
+            tk.Label(self.root, text=field + ":", font=default_font).grid(row=i+1, column=0, sticky="e", **padding)
+            show_char = "*" if mask_last and i == len(fields) - 1 else ""
+            entry = tk.Entry(self.root, width=entry_width, font=default_font, show=show_char)
+            entry.insert(0, values[i])
+            entry.grid(row=i+1, column=1, **padding)
+            self.entries.append(entry)
+
+        # OK button
+        tk.Button(self.root, text=ok_button, font=("Segoe UI", 10, "bold"), bg="#4CAF50", fg="white", width=12, command=self.ok_clicked).grid(row=len(fields)+1, column=0, columnspan=2, pady=(10, 15))
+
+        self.callback_ui = callback_ui
+
+        # Center window
+        self.center_window()
+
+    def center_window(self):
+        self.root.update_idletasks()
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f"{width}x{height}+{x}+{y}")
+
+    def ok_clicked(self):
+        values = [entry.get() for entry in self.entries]
+        self.root.destroy()
+        self.callback_ui(values)
+
+    def run(self):
+        self.root.mainloop()
 
 
 class Mico_MultiBox(MultiBox):
