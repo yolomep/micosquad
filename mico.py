@@ -76,8 +76,9 @@ def main_view():
         # display procedure
         procedure = mico_procedures[choice]
         values = []
+        values = mico_multenterbox(choice, "Procedure", procedure["choices"], values, procedure["button"])
         try:
-            values = mico_multenterbox(choice, "Procedure", procedure["choices"], values, procedure["button"])
+            
             mico_cursor.callproc(choice[:-2], values)
         except Exception:
             pass
