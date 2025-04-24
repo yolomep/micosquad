@@ -20,5 +20,7 @@ tkinter – Used by easygui for GUI rendering.
 
 ## work distributed for the group:
 
-
+Ang - Frontend
+Tong - Backend
+Raymond & Andrew - Debugging sql scripts from phase 3
 
