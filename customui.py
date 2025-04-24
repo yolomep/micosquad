@@ -20,15 +20,6 @@ fixw_font_line_length = 80
 num_lines_displayed = 50
 default_hpad_in_chars = 2
 
-import tkinter as tk
-from tkinter import ttk
-
-# Example style values – ensure these exist in your global scope
-PROPORTIONAL_FONT_FAMILY = "Segoe UI"
-PROPORTIONAL_FONT_SIZE = 12
-TEXT_ENTRY_FONT_SIZE = 11
-STANDARD_SELECTION_EVENTS = ["Return", "space"]
-window_position = "+300+200"  # fallback/default
 
 class GUItk(object):
 
